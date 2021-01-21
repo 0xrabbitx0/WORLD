@@ -252,12 +252,12 @@ contract WorldFarm is Ownable {
     // Just in case an adjustment is needed since mined blocks per day
     // changes constantly depending on the network
     function setBlocksPerDay(uint256 _blocksPerDay) external onlyOwner {
-        require(_blocksPerDay > 0, "Value is zero");
+        require(_blocksPerDay >= 6200 && _blocksPerDay <= 7000, "Value is outside of range 6200-7000");
         blocksPerDay = _blocksPerDay;
     }
 
     function setBlockRewardPercentage(uint256 _blockRewardPercentage) external onlyOwner {
-        require(_blockRewardPercentage > 0, "Value is zero");
+        require(_blockRewardPercentage >= 1 && _blockRewardPercentage <= 5, "Value is outside of range 1-5");
         blockRewardPercentage = _blockRewardPercentage;
     }
 }

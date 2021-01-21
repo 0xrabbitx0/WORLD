@@ -365,8 +365,7 @@ contract WorldToken is Context, IERC20, Ownable {
     }
 
     function setTaxPercentage(uint256 _taxPercentage) external onlyOwner {
-        require(_taxPercentage > 0, "Percentage is zero");
-        require(_taxPercentage <= 20, "Percentage is greater than 20");
+        require(_taxPercentage >= 1 && _taxPercentage <= 10, "Value is outside of range 1-10");
         taxPercentage = _taxPercentage;
     }
 

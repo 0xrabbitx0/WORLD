@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="a0e97916-1bda-4019-81a5-605f9061251d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/WorldFarm.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/WorldFarm.sol" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/WorldToken.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/WorldToken.sol" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/deploy.ts" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/deploy.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

@@ -14,7 +14,7 @@ import {
 async function main(): Promise<void> {
   const UNISWAP_ROUTER = "0x7a250d5630b4cf539739df2c5dacb4c659f2488d";
   const MARKETING_ADDRESS = "0x3737373737373737373737373737373737373737";
-  const BLOCKS_PER_DAY = 6550;
+  const BLOCKS_PER_DAY = 6525;
 
   // CHANGE THIS BEFORE DEPLOYING TO MAIN NET!
   const START_BLOCK = await ethers.provider.getBlockNumber() + 10;
