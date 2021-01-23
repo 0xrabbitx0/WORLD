@@ -28,6 +28,9 @@ contract WorldToken is Context, IERC20, Ownable {
     uint256 private constant T_TOTAL = 100_000_000 * 1e18;
     uint256 private rTotal = (MAX - (MAX % T_TOTAL));
     uint256 private tFeeTotal;
+    uint256 private tMarketingFeeTotal;
+    uint256 private tLpFeeTotal;
+    uint256 private tMerchantFeeTotal;
 
     uint256 public taxPercentage = 3;
     uint256 public holderTaxAlloc = 1;
@@ -118,6 +121,18 @@ contract WorldToken is Context, IERC20, Ownable {
 
     function totalFees() external view returns (uint256) {
         return tFeeTotal;
+    }
+
+    function totalMarketingFees() external view returns (uint256) {
+        return tMarketingFeeTotal;
+    }
+
+    function totalLpFees() external view returns (uint256) {
+        return tLpFeeTotal;
+    }
+
+    function totalMerchantFees() external view returns (uint256) {
+        return tMerchantFeeTotal;
     }
 
     function reflect(uint256 tAmount) public {
@@ -270,6 +285,7 @@ contract WorldToken is Context, IERC20, Ownable {
 
         uint256 currentRate =  _getRate();
         uint256 rMarketingFee = _tMarketingFee.mul(currentRate);
+        tMarketingFeeTotal = tMarketingFeeTotal.add(_tMarketingFee);
 
         rOwned[marketingAddress] = rOwned[marketingAddress].add(rMarketingFee);
         if (excludedFromReward[marketingAddress]) {
@@ -284,6 +300,7 @@ contract WorldToken is Context, IERC20, Ownable {
 
         uint256 currentRate =  _getRate();
         uint256 rLpFee = _tLpFee.mul(currentRate);
+        tLpFeeTotal = tLpFeeTotal.add(_tLpFee);
 
         rOwned[lpStakingAddress] = rOwned[lpStakingAddress].add(rLpFee);
         if (excludedFromReward[lpStakingAddress]) {
@@ -298,6 +315,7 @@ contract WorldToken is Context, IERC20, Ownable {
 
         uint256 currentRate =  _getRate();
         uint256 rMerchantFee = _tMerchantFee.mul(currentRate);
+        tMerchantFeeTotal = tMerchantFeeTotal.add(_tMerchantFee);
 
         rOwned[merchantStakingAddress] = rOwned[merchantStakingAddress].add(rMerchantFee);
         if (excludedFromReward[merchantStakingAddress]) {
