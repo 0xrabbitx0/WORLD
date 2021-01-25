@@ -12,7 +12,7 @@ contract WorldToken is Context, IERC20, Ownable {
     using SafeMath for uint256;
     using Address for address;
 
-    string private constant NAME = "WORLD Token";
+    string private constant NAME = "World Token";
     string private constant SYMBOL = "WORLD";
     uint8 private constant DECIMALS = 18;
 
