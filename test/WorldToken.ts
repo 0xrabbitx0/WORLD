@@ -182,4 +182,81 @@ describe("WORLD token unit tests", () => {
 
     expect(await worldToken.taxPercentage()).to.equal(3);
   });
+
+
+  it("should revert if _holderTaxAlloc is outside of range 1-10", async () => {
+    await expect(worldToken.setTaxAllocations(
+      0,
+      10,
+      10,
+      10,
+    )).to.be.reverted;
+    await expect(worldToken.setTaxAllocations(
+      11,
+      10,
+      10,
+      10,
+    )).to.be.reverted;
+
+    await expect(worldToken.setTaxAllocations(
+      5,
+      10,
+      10,
+      10,
+    )).to.be.not.reverted;
+  });
+
+  it("should revert if _lpTaxAlloc is outside of range 1-10", async () => {
+    await expect(worldToken.setTaxAllocations(
+      10,
+      10,
+      0,
+      10,
+    )).to.be.reverted;
+    await expect(worldToken.setTaxAllocations(
+      10,
+      10,
+      11,
+      10,
+    )).to.be.reverted;
+
+    await expect(worldToken.setTaxAllocations(
+      10,
+      10,
+      5,
+      10,
+    )).to.be.not.reverted;
+  });
+
+  it("should revert if _marketingTaxAlloc is greater than 10", async () => {
+    await expect(worldToken.setTaxAllocations(
+      10,
+      11,
+      10,
+      10,
+    )).to.be.reverted;
+
+    await expect(worldToken.setTaxAllocations(
+      10,
+      5,
+      10,
+      10,
+    )).to.be.not.reverted;
+  });
+
+  it("should revert if _merchantTaxAlloc is greater than 10", async () => {
+    await expect(worldToken.setTaxAllocations(
+      10,
+      10,
+      10,
+      11,
+    )).to.be.reverted;
+
+    await expect(worldToken.setTaxAllocations(
+      10,
+      10,
+      10,
+      5,
+    )).to.be.not.reverted;
+  });
 });

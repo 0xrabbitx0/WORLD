@@ -396,6 +396,23 @@ contract WorldToken is Context, IERC20, Ownable {
         totalTaxAlloc = _holderTaxAlloc.add(_marketingTaxAlloc).add(_lpTaxAlloc).add(_merchantTaxAlloc);
         require(totalTaxAlloc > 0, "Total tax alloc is zero");
 
+        require(
+            _holderTaxAlloc >= 5 && _holderTaxAlloc <= 10,
+            "_holderTaxAlloc is outside of range 5-10"
+        );
+        require(
+            _lpTaxAlloc >= 5 && _lpTaxAlloc <= 10,
+            "_lpTaxAlloc is outside of range 5-10"
+        );
+        require(
+            _marketingTaxAlloc <= 10,
+            "_marketingTaxAlloc is greater than 10"
+        );
+        require(
+            _merchantTaxAlloc <= 10,
+            "_merchantTaxAlloc is greater than 10"
+        );
+
         holderTaxAlloc = _holderTaxAlloc;
         marketingTaxAlloc = _marketingTaxAlloc;
         lpTaxAlloc = _lpTaxAlloc;
