@@ -113,6 +113,11 @@ contract WorldFarm is Ownable {
         require(address(_lpToken) != address(0), "LP token is invalid");
         require(!addedLpTokens[address(_lpToken)], "LP token is already added");
 
+        require(
+            _allocPoint >= 5 && _allocPoint <= 10,
+            "_allocPoint is outside of range 5-10"
+        );
+
         if (_withUpdate) {
             massUpdatePools();
         }
@@ -130,6 +135,11 @@ contract WorldFarm is Ownable {
 
     // Update the given pool's WORLD token allocation point. Can only be called by the owner.
     function set(uint256 _pid, uint256 _allocPoint, bool _withUpdate) public onlyOwner {
+        require(
+            _allocPoint >= 5 && _allocPoint <= 10,
+            "_allocPoint is outside of range 5-10"
+        );
+
         if (_withUpdate) {
             massUpdatePools();
         }

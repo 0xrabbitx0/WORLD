@@ -42,7 +42,7 @@ describe("WORLD farm unit tests", () => {
     ])) as WorldFarm;
 
     await worldFarm.add(
-      utils.parseEther("10"),
+      10,
       lpToken.address,
       false,
     );
@@ -178,9 +178,53 @@ describe("WORLD farm unit tests", () => {
 
   it("should revert if the same lp token is being added twice", async () => {
     await expect(worldFarm.add(
-      utils.parseEther("10"),
+      10,
       lpToken.address,
       false,
     )).to.be.reverted;
+  });
+
+  it("should revert if add allocPoint is outside of range 5-10", async () => {
+    await expect(worldFarm.add(
+      4,
+      "0x000000000000000000000000000000000000dEaD",
+      false,
+    )).to.be.reverted;
+
+    await expect(worldFarm.add(
+      11,
+      "0x000000000000000000000000000000000000dEaD",
+      false,
+    )).to.be.reverted;
+  });
+
+  it("should revert if set allocPoint is outside of range 5-10", async () => {
+    await expect(worldFarm.set(
+      0,
+      4,
+      false,
+    )).to.be.reverted;
+
+    await expect(worldFarm.set(
+      0,
+      11,
+      false,
+    )).to.be.reverted;
+  });
+
+  it("should not revert if add allocPoint is in range 5-10", async () => {
+    await expect(worldFarm.add(
+      6,
+      "0x000000000000000000000000000000000000dEaD",
+      false,
+    )).to.be.not.reverted;
+  });
+
+  it("should not revert if set allocPoint is in range 5-10", async () => {
+    await expect(worldFarm.set(
+      0,
+      6,
+      false,
+    )).to.be.not.reverted;
   });
 });
