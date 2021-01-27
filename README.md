@@ -1,8 +1,8 @@
 # WORLD Contracts
 
 Rinkeby addresses:
-- WORLD Token: [0x88E2C54cc98D9211E2dA6bBe50CE1D1a4B501941](https://rinkeby.etherscan.io/address/0x88E2C54cc98D9211E2dA6bBe50CE1D1a4B501941)
-- WORLD Farm: [0x45e9Bfa363DBb2D34Bc6615B3D25E0590f0e07E4](https://rinkeby.etherscan.io/address/0x45e9Bfa363DBb2D34Bc6615B3D25E0590f0e07E4)
+- WORLD Token: [0x4cfEe942b2D9628B97751411171fBb8672Eed0F3](https://rinkeby.etherscan.io/address/0x4cfEe942b2D9628B97751411171fBb8672Eed0F3)
+- WORLD Farm: [0xF23f74E618c5195F30cb988a1E44aE520c8DBFf8](https://rinkeby.etherscan.io/address/0xF23f74E618c5195F30cb988a1E44aE520c8DBFf8)
 
 
 ## Tools
