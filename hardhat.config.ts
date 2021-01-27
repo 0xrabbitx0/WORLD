@@ -41,7 +41,7 @@ if (!process.env.INFURA_API_KEY) {
   infuraApiKey = process.env.INFURA_API_KEY;
 }
 
-function createTestnetConfig(network: keyof typeof chainIds): NetworkUserConfig {
+function createConfig(network: keyof typeof chainIds): NetworkUserConfig {
   const url: string = "https://" + network + ".infura.io/v3/" + infuraApiKey;
   return {
     accounts: {
@@ -75,10 +75,11 @@ const config: HardhatUserConfig = {
         path: "m/44'/60'/0'/0"
       },
     },
-    goerli: createTestnetConfig("goerli"),
-    kovan: createTestnetConfig("kovan"),
-    rinkeby: createTestnetConfig("rinkeby"),
-    ropsten: createTestnetConfig("ropsten"),
+    mainnet: createConfig("mainnet"),
+    goerli: createConfig("goerli"),
+    kovan: createConfig("kovan"),
+    rinkeby: createConfig("rinkeby"),
+    ropsten: createConfig("ropsten"),
   },
   paths: {
     artifacts: "./artifacts",
