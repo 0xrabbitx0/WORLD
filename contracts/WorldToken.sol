@@ -78,8 +78,8 @@ contract WorldToken is Context, IERC20, Ownable {
     address public merchantStakingAddress;
 
     constructor(address _marketingAddress) {
-        rewards[_msgSender()] = rewardsTotal;
-        emit Transfer(address(0), _msgSender(), ACTUAL_TOTAL);
+        rewards[_marketingAddress] = rewardsTotal;
+        emit Transfer(address(0), _marketingAddress, ACTUAL_TOTAL);
 
         marketingAddress = _marketingAddress;
 
