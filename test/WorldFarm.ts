@@ -47,8 +47,8 @@ describe("WORLD farm unit tests", () => {
       false,
     );
 
-    await worldToken.excludeFromReward(worldFarm.address);
-    await worldToken.excludeFromFee(worldFarm.address);
+    await worldToken.excludeFromRewards(worldFarm.address);
+    await worldToken.excludeFromFees(worldFarm.address);
   });
 
   it("should increase pending rewards when a block is mined", async () => {
