@@ -14,7 +14,7 @@ contract WorldFarm is Ownable {
 
     // Info of each user.
     struct UserInfo {
-        uint256 amount;     // How many LP tokens the user has provided.
+        uint256 amount; // How many LP tokens the user has provided.
         uint256 rewardDebt; // Reward debt. See explanation below.
         //
         // We do some fancy math here. Basically, any point in time, the amount of WORLD tokens
@@ -31,9 +31,9 @@ contract WorldFarm is Ownable {
 
     // Info of each pool.
     struct PoolInfo {
-        IERC20 lpToken;           // Address of LP token contract.
-        uint256 allocPoint;       // How many allocation points assigned to this pool. WORLD tokens to distribute per block.
-        uint256 lastRewardBlock;  // Last block number that WORLD tokens distribution occurs.
+        IERC20 lpToken; // Address of LP token contract.
+        uint256 allocPoint; // How many allocation points assigned to this pool. WORLD tokens to distribute per block.
+        uint256 lastRewardBlock; // Last block number that WORLD tokens distribution occurs.
         uint256 accWorldPerShare; // Accumulated WORLD tokens per share, times 1e12. See below.
     }
 
@@ -42,15 +42,15 @@ contract WorldFarm is Ownable {
 
     PoolInfo[] public poolInfo; // Info of each pool.
     mapping(uint256 => mapping(address => UserInfo)) public userInfo; // Info of each user that stakes LP tokens.
-    uint256 public totalAllocPoint = 0; // Total allocation points. Must be the sum of all allocation points in all pools.
+    uint256 public totalAllocPoint; // Total allocation points. Must be the sum of all allocation points in all pools.
     uint256 public startBlock; // The block number when WORLD token mining starts.
 
     uint256 public blockRewardUpdateCycle = 1 days; // The cycle in which the worldPerBlock gets updated.
     uint256 public blockRewardLastUpdateTime = block.timestamp; // The timestamp when the block worldPerBlock was last updated.
-    uint256 public blocksPerDay; // The estimated number of mined blocks per day.
+    uint256 public blocksPerDay = 6525; // The estimated number of mined blocks per day.
     uint256 public blockRewardPercentage = 1; // The percentage used for worldPerBlock calculation.
 
-    mapping(address => bool) addedLpTokens; // Used for preventing LP tokens from being added twice in add()
+    mapping(address => bool) public addedLpTokens; // Used for preventing LP tokens from being added twice in add().
 
     event Deposit(address indexed user, uint256 indexed pid, uint256 amount);
     event Withdraw(address indexed user, uint256 indexed pid, uint256 amount);
@@ -58,15 +58,12 @@ contract WorldFarm is Ownable {
 
     constructor(
         WorldToken _world,
-        uint256 _blocksPerDay,
         uint256 _startBlock
-    ) public {
+    ) {
         require(address(_world) != address(0), "WORLD address is invalid");
-        require(_blocksPerDay > 0, "blocksPerDay is zero");
         require(_startBlock >= block.number, "startBlock is before current block");
 
         world = _world;
-        blocksPerDay = _blocksPerDay;
         startBlock = _startBlock;
     }
 
@@ -109,14 +106,15 @@ contract WorldFarm is Ownable {
     }
 
     // Add a new lp to the pool. Can only be called by the owner.
-    function add(uint256 _allocPoint, IERC20 _lpToken, bool _withUpdate) public onlyOwner {
+    function add(
+        uint256 _allocPoint,
+        IERC20 _lpToken,
+        bool _withUpdate
+    ) public onlyOwner {
         require(address(_lpToken) != address(0), "LP token is invalid");
         require(!addedLpTokens[address(_lpToken)], "LP token is already added");
 
-        require(
-            _allocPoint >= 5 && _allocPoint <= 10,
-            "_allocPoint is outside of range 5-10"
-        );
+        require(_allocPoint >= 5 && _allocPoint <= 10, "_allocPoint is outside of range 5-10");
 
         if (_withUpdate) {
             massUpdatePools();
@@ -134,11 +132,12 @@ contract WorldFarm is Ownable {
     }
 
     // Update the given pool's WORLD token allocation point. Can only be called by the owner.
-    function set(uint256 _pid, uint256 _allocPoint, bool _withUpdate) public onlyOwner {
-        require(
-            _allocPoint >= 5 && _allocPoint <= 10,
-            "_allocPoint is outside of range 5-10"
-        );
+    function set(
+        uint256 _pid,
+        uint256 _allocPoint,
+        bool _withUpdate
+    ) public onlyOwner {
+        require(_allocPoint >= 5 && _allocPoint <= 10, "_allocPoint is outside of range 5-10");
 
         if (_withUpdate) {
             massUpdatePools();
@@ -155,7 +154,7 @@ contract WorldFarm is Ownable {
         uint256 lpSupply = pool.lpToken.balanceOf(address(this));
         if (block.number > pool.lastRewardBlock && lpSupply != 0) {
             uint256 multiplier = block.number.sub(pool.lastRewardBlock);
-            (uint256 blockReward,) = getWorldPerBlock();
+            (uint256 blockReward, ) = getWorldPerBlock();
             uint256 worldReward = multiplier.mul(blockReward).mul(pool.allocPoint).div(totalAllocPoint);
             accWorldPerShare = accWorldPerShare.add(worldReward.mul(1e12).div(lpSupply));
         }
