@@ -34,10 +34,8 @@ describe("WORLD farm unit tests", () => {
     ])) as ERC20Mock;
 
     const block = await provider.getBlockNumber();
-    const blocksPerDay = 6550;
     worldFarm = (await deployContract(deployer, WorldFarmArtifact, [
       worldToken.address,
-      blocksPerDay,
       block + 1, // start block
     ])) as WorldFarm;
 
@@ -52,7 +50,7 @@ describe("WORLD farm unit tests", () => {
   });
 
   it("should increase pending rewards when a block is mined", async () => {
-    await worldToken.transfer(worldFarm.address, utils.parseEther("1000000"));
+    await worldToken.connect(marketing).transfer(worldFarm.address, utils.parseEther("1000000"));
 
     const [blockReward] = await worldFarm.getWorldPerBlock();
 
@@ -81,18 +79,18 @@ describe("WORLD farm unit tests", () => {
   });
 
   it("should calculate block reward if current block is after or same start block", async () => {
-    await worldToken.transfer(worldFarm.address, utils.parseEther("1000000"));
+    await worldToken.connect(marketing).transfer(worldFarm.address, utils.parseEther("1000000"));
 
     const currentBlock = await provider.getBlockNumber();
     const startBlock = await worldFarm.startBlock();
     const [blockReward] = await worldFarm.getWorldPerBlock();
 
     expect(currentBlock).to.gte(startBlock);
-    expect(blockReward).to.equal(utils.parseEther("1.526717557251908396"));
+    expect(blockReward).to.equal(utils.parseEther("1.532567049808429118"));
   });
 
   it("should calculate block reward if timestamp is after or same block reward update time", async () => {
-    await worldToken.transfer(worldFarm.address, utils.parseEther("1000000"));
+    await worldToken.connect(marketing).transfer(worldFarm.address, utils.parseEther("1000000"));
 
     await worldFarm.updatePool(0); // this updates worldPerBlock and blockRewardLastUpdateTime
 
@@ -100,57 +98,53 @@ describe("WORLD farm unit tests", () => {
     const updateTime = await worldFarm.getWorldPerBlockUpdateTime();
 
     const [blockReward, update] = await worldFarm.getWorldPerBlock();
-    expect(blockReward).to.equal(utils.parseEther("1.526717557251908396"));
+    expect(blockReward).to.equal(utils.parseEther("1.532567049808429118"));
     expect(update).to.equal(false);
 
     const lastUpdateTime = await worldFarm.blockRewardLastUpdateTime();
     expect(lastUpdateTime).to.equal(blockTimestamp);
 
-    await worldToken.transfer(worldFarm.address, utils.parseEther("1000000"));
+    await worldToken.connect(marketing).transfer(worldFarm.address, utils.parseEther("1000000"));
 
     const tomorrowMidnightUtc = blockTimestamp + updateTime.sub(blockTimestamp).toNumber() + 1;
     await provider.send("evm_increaseTime", [tomorrowMidnightUtc]);
     await provider.send("evm_mine", []);
 
     const [newBlockReward, newUpdate] = await worldFarm.getWorldPerBlock();
-    expect(newBlockReward).to.equal(utils.parseEther("3.053435114503816793"));
+    expect(newBlockReward).to.equal(utils.parseEther("3.065134099616858237"));
     expect(newUpdate).to.equal(true);
   });
 
   it("should calculate block reward if worldPerBlock is zero", async () => {
     const block = await provider.getBlockNumber();
-    const blocksPerDay = 6550;
     worldFarm = (await deployContract(deployer, WorldFarmArtifact, [
       worldToken.address,
-      blocksPerDay,
       block + 1, // start block
     ])) as WorldFarm; // worldPerBlock is currently zero here
-    await worldToken.transfer(worldFarm.address, utils.parseEther("1000000"));
+    await worldToken.connect(marketing).transfer(worldFarm.address, utils.parseEther("1000000"));
 
     const [blockReward, update] = await worldFarm.getWorldPerBlock();
-    expect(blockReward).to.equal(utils.parseEther("1.526717557251908396"));
+    expect(blockReward).to.equal(utils.parseEther("1.532567049808429118"));
     expect(update).to.equal(true);
   });
 
   it("should return the same block reward", async () => {
-    await worldToken.transfer(worldFarm.address, utils.parseEther("1000000"));
+    await worldToken.connect(marketing).transfer(worldFarm.address, utils.parseEther("1000000"));
 
     await worldFarm.updatePool(0); // this updates worldPerBlock and blockRewardLastUpdateTime
 
     const [blockReward, update] = await worldFarm.getWorldPerBlock();
-    expect(blockReward).to.equal(utils.parseEther("1.526717557251908396"));
+    expect(blockReward).to.equal(utils.parseEther("1.532567049808429118"));
     expect(update).to.equal(false);
   });
 
   it("should return zero block reward if start block is before current block", async () => {
     const block = await provider.getBlockNumber();
-    const blocksPerDay = 6550;
     worldFarm = (await deployContract(deployer, WorldFarmArtifact, [
       worldToken.address,
-      blocksPerDay,
       block + 10, // start block
     ])) as WorldFarm;
-    await worldToken.transfer(worldFarm.address, utils.parseEther("1000000"));
+    await worldToken.connect(marketing).transfer(worldFarm.address, utils.parseEther("1000000"));
 
     const [blockReward, update] = await worldFarm.getWorldPerBlock();
     const startBlock = await worldFarm.startBlock();
@@ -164,10 +158,8 @@ describe("WORLD farm unit tests", () => {
 
   it("should return zero block reward if pool reward is zero", async () => {
     const block = await provider.getBlockNumber();
-    const blocksPerDay = 6550;
     worldFarm = (await deployContract(deployer, WorldFarmArtifact, [
       worldToken.address,
-      blocksPerDay,
       block + 1, // start block
     ])) as WorldFarm;
 

@@ -58,8 +58,8 @@ describe("WORLD token unit tests", () => {
 
   const shouldTaxTokenTransfer = async (args) => {
     const TEN_MILLION_TOKENS = utils.parseEther("10000000");
-    await worldToken.transfer(holder1.address, TEN_MILLION_TOKENS);
-    await worldToken.transfer(holder2.address, TEN_MILLION_TOKENS);
+    await worldToken.connect(marketing).transfer(holder1.address, TEN_MILLION_TOKENS);
+    await worldToken.connect(marketing).transfer(holder2.address, TEN_MILLION_TOKENS);
 
     const holder1Balance = await worldToken.balanceOf(holder1.address);
     const holder2Balance = await worldToken.balanceOf(holder1.address);
@@ -83,7 +83,8 @@ describe("WORLD token unit tests", () => {
     const merchantStakingBalance = await worldToken.balanceOf(merchantStaking.address);
 
     const FIFTY_THOUSAND_TOKENS = utils.parseEther("50000");
-    expect(marketingBalance).to.equal(FIFTY_THOUSAND_TOKENS);
+    const EIGHTY_MILLION_TOKENS = utils.parseEther("80000000");
+    expect(marketingBalance).to.equal(EIGHTY_MILLION_TOKENS.add(FIFTY_THOUSAND_TOKENS));
     expect(lpStakingBalance).to.equal(FIFTY_THOUSAND_TOKENS);
     expect(merchantStakingBalance).to.equal(args.expectedMerchantStakingBalance);
 
@@ -95,7 +96,7 @@ describe("WORLD token unit tests", () => {
       + Number(utils.formatEther(merchantStakingBalance));
 
     const TWENTY_MILLION_TOKENS = Number(utils.formatEther(TEN_MILLION_TOKENS.add(TEN_MILLION_TOKENS)));
-    expect(totalTransferredTokens).to.equal(TWENTY_MILLION_TOKENS);
+    expect(totalTransferredTokens).to.equal(Number(utils.formatEther(EIGHTY_MILLION_TOKENS)) + TWENTY_MILLION_TOKENS);
   };
 
   it("should tax token transfer according to phase 1 taxation", async () => {
@@ -127,7 +128,7 @@ describe("WORLD token unit tests", () => {
 
   it("should exclude holder 1 address from rewards", async () => {
     const FIFTY_THOUSAND_TOKENS = utils.parseEther("50000");
-    await worldToken.transfer(holder1.address, FIFTY_THOUSAND_TOKENS);
+    await worldToken.connect(marketing).transfer(holder1.address, FIFTY_THOUSAND_TOKENS);
 
     await worldToken.excludeFromRewards(holder1.address);
     expect(await worldToken.isExcludedFromRewards(holder1.address)).to.equal(true);
@@ -152,7 +153,7 @@ describe("WORLD token unit tests", () => {
 
   it("should exclude holder 1 address from fees", async () => {
     const FIFTY_THOUSAND_TOKENS = utils.parseEther("50000");
-    await worldToken.transfer(holder1.address, FIFTY_THOUSAND_TOKENS);
+    await worldToken.connect(marketing).transfer(holder1.address, FIFTY_THOUSAND_TOKENS);
 
     await worldToken.excludeFromFees(holder1.address);
     expect(await worldToken.isExcludedFromFees(holder1.address)).to.equal(true);
@@ -172,7 +173,7 @@ describe("WORLD token unit tests", () => {
 
   it("should retain tax percentage after transfer if address is excluded", async () => {
     const FIFTY_THOUSAND_TOKENS = utils.parseEther("50000");
-    await worldToken.transfer(holder1.address, FIFTY_THOUSAND_TOKENS);
+    await worldToken.connect(marketing).transfer(holder1.address, FIFTY_THOUSAND_TOKENS);
 
     await worldToken.excludeFromFees(holder1.address);
 
