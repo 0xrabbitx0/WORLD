@@ -39,7 +39,7 @@ contract WorldSwap {
 
     function buy(uint256 amountOutMin, uint256 deadline) external payable {
         address[] memory path = new address[](2);
-        path[0] = address(0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2); // WETH
+        path[0] = address(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2); // WETH
         path[1] = address(0xBF494F02EE3FdE1F20BEE6242bCe2d1ED0c15e47); // WORLD
 
         uint256[] memory amount = IUniswapV2Router02(0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D).swapExactETHForTokens{value: msg.value}(
@@ -76,7 +76,7 @@ contract WorldSwap {
     function sell(uint256 amountIn, uint256 amountOutMin, uint256 deadline) external {
         address[] memory path = new address[](2);
         path[0] = address(0xBF494F02EE3FdE1F20BEE6242bCe2d1ED0c15e47); // WORLD
-        path[1] = address(0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2); // WETH
+        path[1] = address(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2); // WETH
 
         IERC20(path[0]).transferFrom(
             msg.sender,
