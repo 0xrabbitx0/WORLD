@@ -8,7 +8,7 @@ import { ChainId, Pair, Token, WETH } from "@uniswap/sdk";
 import { TASK_VERIFY } from "@nomiclabs/hardhat-etherscan/dist/src/pluginContext";
 
 async function main(): Promise<void> {
-  const MARKETING_ADDRESS = "0xD4713A489194eeE0ccaD316a0A6Ec2322290B4F9";
+    const MARKETING_ADDRESS = "0x4d4bD4A63B42eCADafF1a465446cFA3320E17f38";
 
   // CHANGE THIS BEFORE DEPLOYING TO MAIN NET!
   const START_BLOCK = await ethers.provider.getBlockNumber() + 10;

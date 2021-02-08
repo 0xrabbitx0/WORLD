@@ -4,7 +4,7 @@ Mainnet addresses:
 - WORLD Token: [0xBF494F02EE3FdE1F20BEE6242bCe2d1ED0c15e47](https://rinkeby.etherscan.io/address/0xBF494F02EE3FdE1F20BEE6242bCe2d1ED0c15e47)
 
 Rinkeby addresses:
-- WORLD Token: [0x4cfEe942b2D9628B97751411171fBb8672Eed0F3](https://rinkeby.etherscan.io/address/0x4cfEe942b2D9628B97751411171fBb8672Eed0F3)
+- WORLD Token: [0x2296507F9fe3176B5fC976092a64E98CC811Cd07](https://rinkeby.etherscan.io/address/0x2296507F9fe3176B5fC976092a64E98CC811Cd07)
 - WORLD Farm: [0xF23f74E618c5195F30cb988a1E44aE520c8DBFf8](https://rinkeby.etherscan.io/address/0xF23f74E618c5195F30cb988a1E44aE520c8DBFf8)
 
 
