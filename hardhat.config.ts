@@ -13,6 +13,7 @@ import "hardhat-watcher";
 import "hardhat-abi-exporter";
 import "@nomiclabs/hardhat-etherscan";
 import "hardhat-contract-sizer";
+import "hardhat-gas-reporter"
 
 dotenvConfig({ path: resolve(__dirname, "./.env") });
 

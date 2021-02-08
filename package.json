@@ -75,12 +75,13 @@
     "deployFarm:rinkeby": "npx hardhat --network rinkeby run scripts/deployFarm.ts",
     "deployFarm:mainnet": "npx hardhat --network mainnet run scripts/deployFarm.ts",
     "deployWorldSwap:rinkeby": "npx hardhat --network rinkeby run scripts/deployWorldSwap.ts",
-    "deployWorldSwap:mainnet": "npx hardhat --network mainnet run scripts/deployWorldSwap.ts"
+    "deployWorldSwap:mainnet": "npx hardhat --network mainnet run scripts/deployWorldSwap.ts",
+    "deployWorldOTC:rinkeby": "npx hardhat --network rinkeby run scripts/deployWorldOTC.ts"
   },
   "dependencies": {
     "@apollo/client": "^3.3.7",
     "@nomiclabs/hardhat-etherscan": "^2.1.0",
-    "@openzeppelin/contracts": "^3.3.0",
+    "@openzeppelin/contracts": "^3.4.0",
     "@uniswap/sdk": "^3.0.3",
     "@uniswap/v2-core": "^1.0.1",
     "@uniswap/v2-periphery": "^1.1.0-beta.0",
