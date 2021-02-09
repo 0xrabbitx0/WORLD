@@ -37,7 +37,7 @@ contract WorldSwap {
         );
     }
 
-    function buy(uint256 amountOutMin, uint256 deadline) external payable {
+    function buy(uint256 amountOutMin, address recipient, uint256 deadline) external payable {
         address[] memory path = new address[](2);
         path[0] = address(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2); // WETH
         path[1] = address(0xBF494F02EE3FdE1F20BEE6242bCe2d1ED0c15e47); // WORLD
@@ -50,30 +50,12 @@ contract WorldSwap {
         );
 
         IERC20(path[1]).transfer(
-            msg.sender,
+            recipient,
             amount[1].sub(amount[1].mul(3).div(100))
         );
     }
 
-    function buyWithPath(uint256 amountOutMin, address[] calldata path, uint256 deadline) external payable {
-        address world = path[path.length - 1];
-        require(world == address(0xBF494F02EE3FdE1F20BEE6242bCe2d1ED0c15e47), "Last path element is not WORLD");
-
-        uint256[] memory amount = IUniswapV2Router02(0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D).swapExactETHForTokens{value: msg.value}(
-            amountOutMin,
-            path,
-            address(this),
-            deadline
-        );
-
-        uint256 worldAmount = amount[path.length - 1];
-        IERC20(world).transfer(
-            msg.sender,
-            worldAmount.sub(worldAmount.mul(3).div(100))
-        );
-    }
-
-    function sell(uint256 amountIn, uint256 amountOutMin, uint256 deadline) external {
+    function sell(uint256 amountIn, uint256 amountOutMin, address recipient, uint256 deadline) external {
         address[] memory path = new address[](2);
         path[0] = address(0xBF494F02EE3FdE1F20BEE6242bCe2d1ED0c15e47); // WORLD
         path[1] = address(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2); // WETH
@@ -88,25 +70,7 @@ contract WorldSwap {
             amountIn.sub(amountIn.mul(3).div(100)),
             amountOutMin,
             path,
-            msg.sender,
-            deadline
-        );
-    }
-
-    function sellWithPath(uint256 amountIn, uint256 amountOutMin, address[] calldata path, uint256 deadline) external {
-        require(path[0] == address(0xBF494F02EE3FdE1F20BEE6242bCe2d1ED0c15e47), "First path element is not WORLD");
-
-        IERC20(path[0]).transferFrom(
-            msg.sender,
-            address(this),
-            amountIn
-        );
-
-        IUniswapV2Router02(0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D).swapExactTokensForETH(
-            amountIn.sub(amountIn.mul(3).div(100)),
-            amountOutMin,
-            path,
-            msg.sender,
+            recipient,
             deadline
         );
     }
@@ -115,10 +79,7 @@ contract WorldSwap {
         IWorldToken world = IWorldToken(address(0xBF494F02EE3FdE1F20BEE6242bCe2d1ED0c15e47));
         uint256 balance = world.balanceOf(address(this));
         uint256 rewards = balance.div(3);
-
-        if (balance == 0 || rewards == 0) {
-            return;
-        }
+        require(rewards > 0, "Not enough rewards to distribute");
 
         world.distribute(rewards);
         world.transfer(address(0xD4713A489194eeE0ccaD316a0A6Ec2322290B4F9), rewards); // marketingAddress
