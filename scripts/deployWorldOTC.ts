@@ -8,7 +8,7 @@ import { TASK_VERIFY } from "@nomiclabs/hardhat-etherscan/dist/src/pluginContext
 
 async function main(): Promise<void> {
   const TOKEN_ADDRESS = "0x99533c23477ce72d322204f7e8182099836953ca";
-  const RATE = ethers.utils.parseEther("0.0009");
+  const WEI_PER_WORLD = ethers.utils.parseEther("0.0009");
 
   if (network.name === "hardhat") {
     console.warn(
@@ -36,7 +36,7 @@ async function main(): Promise<void> {
   console.log("WorldVesting deployed to: ", worldVesting.address);
 
   const WorldOTC: ContractFactory = await ethers.getContractFactory("WorldOTC");
-  const worldOTC: Contract = await WorldOTC.deploy(worldToken.address, worldVesting.address, RATE);
+  const worldOTC: Contract = await WorldOTC.deploy(worldToken.address, worldVesting.address, WEI_PER_WORLD);
   await worldOTC.deployed();
   console.log("WorldOTC deployed to: ", worldOTC.address);
 
@@ -44,11 +44,15 @@ async function main(): Promise<void> {
 
   await run(TASK_VERIFY, {
     address: worldOTC.address,
-    constructorArguments: [worldToken.address, worldVesting.address, RATE.toString()],
+    constructorArguments: [
+      worldToken.address,
+      worldVesting.address,
+      WEI_PER_WORLD.toString(),
+    ],
   });
 
   await run(TASK_VERIFY, {
-    address: worldVesting.address
+    address: worldVesting.address,
   });
 }
 
