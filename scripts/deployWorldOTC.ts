@@ -4,10 +4,10 @@
 // Runtime Environment's members available in the global scope.
 import { ethers, network, run } from "hardhat";
 import { Contract, ContractFactory } from "ethers";
-import { TASK_VERIFY } from "@nomiclabs/hardhat-etherscan/dist/src/pluginContext";
+import { TASK_VERIFY } from "@nomiclabs/hardhat-etherscan/dist/src/constants";
 
 async function main(): Promise<void> {
-  const TOKEN_ADDRESS = "0x99533c23477ce72d322204f7e8182099836953ca";
+  const TOKEN_ADDRESS = "0xBF494F02EE3FdE1F20BEE6242bCe2d1ED0c15e47";
   const WEI_PER_WORLD = ethers.utils.parseEther("0.0009");
 
   if (network.name === "hardhat") {
@@ -44,7 +44,7 @@ async function main(): Promise<void> {
 
   await run(TASK_VERIFY, {
     address: worldOTC.address,
-    constructorArguments: [
+    constructorArgsParams: [
       worldToken.address,
       worldVesting.address,
       WEI_PER_WORLD.toString(),

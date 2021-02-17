@@ -4,11 +4,10 @@
 // Runtime Environment's members available in the global scope.
 import { ethers, network, run } from "hardhat";
 import { Contract, ContractFactory } from "ethers";
-import { ChainId, Pair, Token, WETH } from "@uniswap/sdk";
-import { TASK_VERIFY } from "@nomiclabs/hardhat-etherscan/dist/src/pluginContext";
+import { TASK_VERIFY } from "@nomiclabs/hardhat-etherscan/dist/src/constants";
 
 async function main(): Promise<void> {
-  const TOKEN_ADDRESS = "0xBF494F02EE3FdE1F20BEE6242bCe2d1ED0c15e47";
+  const TOKEN_ADDRESS = "0x31FFbe9bf84b4d9d02cd40eCcAB4Af1E2877Bbc6";
 
   // CHANGE THIS BEFORE DEPLOYING TO MAIN NET!
   const START_BLOCK = await ethers.provider.getBlockNumber() + 10;
@@ -43,11 +42,8 @@ async function main(): Promise<void> {
   console.log("WorldFarm start block: ", START_BLOCK);
 
   // INITIAL SETUP
-  const chainId = network.config.chainId as ChainId;
-  const lpTokenAddress = Pair.getAddress(
-    new Token(chainId, worldToken.address, 18, "any"),
-    WETH[chainId],
-  );
+  // const chainId = network.config.chainId as ChainId;
+  const lpTokenAddress = "0x015081CeCBa29736fBae67b08a9abFc12e0c6A04"
 
   await worldFarm.add(
     10,
@@ -57,11 +53,11 @@ async function main(): Promise<void> {
 
   await worldToken.setLpStakingAddress(worldFarm.address);
   await worldToken.excludeFromRewards(worldFarm.address);
-  await worldToken.excludeFromFees(worldFarm.address);
+  // await worldToken.excludeFromFees(worldFarm.address);
 
   await run(TASK_VERIFY, {
     address: worldFarm.address,
-    constructorArguments: [TOKEN_ADDRESS, START_BLOCK.toString()],
+    constructorArgsParams: [TOKEN_ADDRESS, START_BLOCK.toString()],
   });
 }
 

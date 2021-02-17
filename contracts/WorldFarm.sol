@@ -47,7 +47,7 @@ contract WorldFarm is Ownable {
 
     uint256 public blockRewardUpdateCycle = 1 days; // The cycle in which the worldPerBlock gets updated.
     uint256 public blockRewardLastUpdateTime = block.timestamp; // The timestamp when the block worldPerBlock was last updated.
-    uint256 public blocksPerDay = 6525; // The estimated number of mined blocks per day.
+    uint256 public blocksPerDay = 28750; // The estimated number of mined blocks per day.
     uint256 public blockRewardPercentage = 1; // The percentage used for worldPerBlock calculation.
 
     mapping(address => bool) public addedLpTokens; // Used for preventing LP tokens from being added twice in add().
@@ -261,7 +261,7 @@ contract WorldFarm is Ownable {
     // Just in case an adjustment is needed since mined blocks per day
     // changes constantly depending on the network
     function setBlocksPerDay(uint256 _blocksPerDay) external onlyOwner {
-        require(_blocksPerDay >= 6200 && _blocksPerDay <= 7000, "Value is outside of range 6200-7000");
+        require(_blocksPerDay >= 20000 && _blocksPerDay <= 40000, "Value is outside of range 20000-40000");
         blocksPerDay = _blocksPerDay;
     }
 

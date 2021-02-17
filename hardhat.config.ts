@@ -25,6 +25,8 @@ const chainIds = {
   mainnet: 1,
   rinkeby: 4,
   ropsten: 3,
+  bsc: 56,
+  bsctestnet: 97
 };
 
 // Ensure that we have all the environment variables we need.
@@ -76,6 +78,28 @@ const config: HardhatUserConfig = {
         path: "m/44'/60'/0'/0"
       },
     },
+    bsctestnet: {
+      chainId: chainIds.bsctestnet,
+      accounts: {
+        count: 10,
+        initialIndex: 0,
+        mnemonic,
+        path: "m/44'/60'/0'/0",
+      },
+      gasPrice: 20000000000,
+      url: "https://data-seed-prebsc-1-s1.binance.org:8545",
+    },
+    bsc: {
+      chainId: chainIds.bsc,
+      accounts: {
+        count: 10,
+        initialIndex: 0,
+        mnemonic,
+        path: "m/44'/60'/0'/0",
+      },
+      gasPrice: 20000000000,
+      url: "https://bsc-dataseed.binance.org/"
+    },
     mainnet: createConfig("mainnet"),
     goerli: createConfig("goerli"),
     kovan: createConfig("kovan"),
@@ -94,7 +118,7 @@ const config: HardhatUserConfig = {
       // https://hardhat.org/hardhat-network/#solidity-optimizer-support
       optimizer: {
         enabled: true,
-        runs: 200,
+        runs: 999999,
       },
     },
   },
@@ -122,6 +146,7 @@ const config: HardhatUserConfig = {
     disambiguatePaths: false,
   },
   etherscan: {
+    // apiKey: process.env.BSC_ETHERSCAN_API_KEY
     apiKey: process.env.ETHERSCAN_API_KEY
   }
 };

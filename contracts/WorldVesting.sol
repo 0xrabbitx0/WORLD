@@ -29,7 +29,7 @@ contract WorldVesting is Initializable {
     uint256 public start; // the start time of the token vesting
     uint256 public duration; // the duration of the world tokens vesting
     uint256 public released;  // the amount of the world tokens released
-    uint256 public rate; // the eth rate per world token
+    uint256 public weiPerWorld; // the eth weiPerWorld per world token
     uint256 public amount; // the total amount of the world tokens vested
 
     IERC20 public world;
@@ -39,7 +39,7 @@ contract WorldVesting is Initializable {
      * beneficiary, gradually in a linear fashion until start + duration. By then all
      * of the balance will have vested.
      * @param _beneficiary address of the beneficiary to whom vested tokens are transferred
-     * @param _rate eth rate per world token
+     * @param _weiPerWorld weiPerWorld wei rate per world token
      * @param _amount total amount of the world tokens vested
      * @param _cliffDuration duration in seconds of the cliff in which tokens will begin to vest
      * @param _start the time (as Unix time) at which point vesting starts
@@ -48,7 +48,7 @@ contract WorldVesting is Initializable {
     function initialize (
         address _world,
         address _beneficiary,
-        uint256 _rate,
+        uint256 _weiPerWorld,
         uint256 _amount,
         uint256 _start,
         uint256 _cliffDuration,
@@ -56,7 +56,7 @@ contract WorldVesting is Initializable {
     ) public initializer {
         require(_world != address(0), "WorldVesting: world is a zero address");
         require(_beneficiary != address(0), "WorldVesting: beneficiary is a zero address");
-        require(_rate > 0, "WorldVesting: rate is 0");
+        require(_weiPerWorld > 0, "WorldVesting: weiPerWorld is 0");
         require(_amount > 0, "WorldVesting: amount is 0");
         require(_cliffDuration <= _duration, "WorldVesting: cliff is longer than duration");
         require(_duration > 0, "WorldVesting: duration is 0");
@@ -64,7 +64,7 @@ contract WorldVesting is Initializable {
 
         world = IERC20(_world);
         beneficiary = _beneficiary;
-        rate = _rate;
+        weiPerWorld = _weiPerWorld;
         amount = _amount;
         duration = _duration;
         cliff = _start.add(_cliffDuration);
@@ -75,6 +75,7 @@ contract WorldVesting is Initializable {
      * Transfers vested world tokens to beneficiary.
      */
     function release() external {
+        require(msg.sender == beneficiary, "WorldVesting: caller is not beneficiary");
         uint256 unreleased = releasableAmount();
 
         require(unreleased > 0, "WorldVesting: no world tokens are due");

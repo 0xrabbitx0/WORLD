@@ -83,10 +83,15 @@
     "deployToken:mainnet": "npx hardhat --network mainnet run scripts/deployToken.ts",
     "deployFarm:rinkeby": "npx hardhat --network rinkeby run scripts/deployFarm.ts",
     "deployFarm:mainnet": "npx hardhat --network mainnet run scripts/deployFarm.ts",
+    "deployFarm:bsc": "npx hardhat --network bsc run scripts/deployFarm.ts",
     "deployWorldSwap:rinkeby": "npx hardhat --network rinkeby run scripts/deployWorldSwap.ts",
     "deployWorldSwap:mainnet": "npx hardhat --network mainnet run scripts/deployWorldSwap.ts",
     "deployWorldOTC:rinkeby": "npx hardhat --network rinkeby run scripts/deployWorldOTC.ts",
+    "deployWorldOTC:bsc": "npx hardhat --network bsc run scripts/deployWorldOTC.ts",
+    "deployWorldOTC:mainnet": "npx hardhat --network mainnet run scripts/deployWorldOTC.ts",
     "deployToken:bsctestnet": "npx hardhat --network bsctestnet run scripts/deployToken.ts",
-    "deployWorldBSC:bsctestnet": "npx hardhat --network bsctestnet run scripts/deployWorldBSC.ts"
+    "deployToken:bsc": "npx hardhat --network bsc run scripts/deployToken.ts",
+    "deployWorldBSC:bsctestnet": "npx hardhat --network bsctestnet run scripts/deployWorldBSC.ts",
+    "deployWorldBSC:bsc": "npx hardhat --network bsc run scripts/deployWorldBSC.ts"
   }
 }

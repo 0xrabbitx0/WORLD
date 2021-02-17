@@ -20,33 +20,33 @@ contract WorldOTC is Ownable {
     mapping(address => bool) public whitelisted;
     bool public whitelistedOnly = false;
 
-    uint256 public rate;
+    uint256 public weiPerWorld;
     uint256 public vestingCliffDuration = 7 days;
     uint256 public vestingDuration = 28 days;
 
-    constructor(address _world, address _vestingLogic, uint256 _rate) {
+    constructor(address _world, address _vestingLogic, uint256 _weiPerWorld) {
         require(_world != address(0), "WorldOTC: world is a zero address");
         require(_vestingLogic != address(0), "WorldOTC: vestingLogic is a zero address");
-        require(_rate != 0, "WorldOTC: rate is zero");
+        require(_weiPerWorld != 0, "WorldOTC: weiPerWorld is zero");
         WORLD = IERC20(_world);
         VESTING_LOGIC = _vestingLogic;
-        rate = _rate;
+        weiPerWorld = _weiPerWorld;
     }
 
     function buy() payable public {
         require(!whitelistedOnly || whitelisted[msg.sender], "WorldOTC: caller is not whitelisted");
-        require(msg.value >= 1, "WorldOTC: eth value is less than 1");
-        require((msg.value % 1 ether) == 0, "WorldOTC: eth value is not a whole number");
+        require(msg.value >= 1, "WorldOTC: eth amount is less than 1");
+        require((msg.value % 1 ether) == 0, "WorldOTC: eth amount is not a whole number");
 
         uint256 balance = WORLD.balanceOf(address(this));
-        uint256 amount = msg.value.mul(1e18).div(rate);
+        uint256 amount = msg.value.mul(1e18).div(weiPerWorld);
         require(amount <= balance, "WorldOTC: world balance is insufficient");
 
         WorldVesting vesting = WorldVesting(Clones.clone(VESTING_LOGIC));
         vesting.initialize(
             address(WORLD),
             msg.sender,
-            rate,
+            weiPerWorld,
             amount,
             block.timestamp,
             vestingCliffDuration,
@@ -79,9 +79,9 @@ contract WorldOTC is Ownable {
         return vestings[_account].length;
     }
 
-    function setRate(uint256 _rate) external onlyOwner {
-        require(_rate != 0, "WorldOTC: rate is zero");
-        rate = _rate;
+    function setRate(uint256 _weiPerWorld) external onlyOwner {
+        require(_weiPerWorld != 0, "WorldOTC: weiPerWorld is zero");
+        weiPerWorld = _weiPerWorld;
     }
 
     function setVestingCliffDuration(uint256 _vestingCliffDuration) external onlyOwner {

@@ -4,52 +4,47 @@
 // Runtime Environment's members available in the global scope.
 import { ethers, network, run } from "hardhat";
 import { Contract, ContractFactory } from "ethers";
-// import {
-//   ChainId,
-//   Pair,
-//   Token,
-//   WETH
-// } from '@uniswap/sdk';
 import { TASK_VERIFY } from "@nomiclabs/hardhat-etherscan/dist/src/constants";
 
 async function main(): Promise<void> {
-  const MARKETING_ADDRESS = "0xD4713A489194eeE0ccaD316a0A6Ec2322290B4F9";
+  const TOKEN_ADDRESS = "0x31FFbe9bf84b4d9d02cd40eCcAB4Af1E2877Bbc6";
+  const WRAPPED_TOKEN_ADDRESS = "0x97beCDC5e95858eC2a8CD8631B3d56234461aD62";
 
   if (network.name === "hardhat") {
     console.warn(
       "You are trying to deploy a contract to the Hardhat Network, which" +
       "gets automatically created and destroyed every time. Use the Hardhat" +
-      " option '--network localhost'"
+      " option '--network localhost'",
     );
   }
 
   const [deployer] = await ethers.getSigners();
   console.log(
     "Deploying the contracts with the account:",
-    await deployer.getAddress()
+    await deployer.getAddress(),
   );
 
   console.log("Account balance: ", ethers.utils.formatEther(await deployer.getBalance()));
 
-  console.log("Marketing address: ", MARKETING_ADDRESS);
-
   const WorldToken: ContractFactory = await ethers.getContractFactory("WorldToken");
-  const worldToken: Contract = await WorldToken.deploy(MARKETING_ADDRESS);
-  await worldToken.deployed();
-  console.log("WorldToken deployed to: ", worldToken.address);
+  const worldToken: Contract = await WorldToken.attach(TOKEN_ADDRESS);
+  console.log("WorldToken address: ", worldToken.address);
+
+  const WorldBSC: ContractFactory = await ethers.getContractFactory("WorldBSC");
+  const worldBSC: Contract = await WorldBSC.deploy(
+    TOKEN_ADDRESS,
+    WRAPPED_TOKEN_ADDRESS
+  );
+  await worldBSC.deployed();
+  console.log("WorldBSC deployed to: ", worldBSC.address);
 
   // INITIAL SETUP
-  // const chainId = network.config.chainId as ChainId;
-  // const lpTokenAddress = Pair.getAddress(
-  //   new Token(chainId, worldToken.address, 18, 'any'),
-  //   WETH[chainId]
-  // );
-
-  // await worldToken.excludeFromRewards(lpTokenAddress);
+  await worldToken.excludeFromRewards(worldBSC.address);
+  await worldToken.excludeFromFees(worldBSC.address);
 
   await run(TASK_VERIFY, {
-    address: worldToken.address,
-    constructorArgsParams: [MARKETING_ADDRESS],
+    address: worldBSC.address,
+    constructorArgsParams: [TOKEN_ADDRESS, WRAPPED_TOKEN_ADDRESS],
   });
 }
 
